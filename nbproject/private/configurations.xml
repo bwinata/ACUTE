@@ -12,9 +12,6 @@
       </df>
       <df name="src">
         <in>acuteAsserts.c</in>
-        <in>acuteConsoleDisplay.c</in>
-        <in>acuteTestCases.c</in>
-        <in>acuteTestSuites.c</in>
       </df>
     </df>
     <df root="src" name="1">
