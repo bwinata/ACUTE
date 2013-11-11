@@ -4,9 +4,6 @@
     <df root="." name="0">
       <df name="src">
         <in>acuteAsserts.c</in>
-        <in>acuteConsoleDisplay.c</in>
-        <in>acuteTestCases.c</in>
-        <in>acuteTestSuites.c</in>
       </df>
     </df>
     <df root="src" name="1">
@@ -47,18 +44,6 @@
         </makeTool>
       </makefileType>
       <item path="src/acuteAsserts.c" ex="false" tool="0" flavor2="2">
-        <cTool>
-        </cTool>
-      </item>
-      <item path="src/acuteConsoleDisplay.c" ex="false" tool="0" flavor2="2">
-        <cTool>
-        </cTool>
-      </item>
-      <item path="src/acuteTestCases.c" ex="false" tool="0" flavor2="2">
-        <cTool>
-        </cTool>
-      </item>
-      <item path="src/acuteTestSuites.c" ex="false" tool="0" flavor2="2">
         <cTool>
         </cTool>
       </item>
