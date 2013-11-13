@@ -15,6 +15,8 @@
 #include <stdarg.h>
 #include <unistd.h>
 
+#include "acuteAsserts.h"
+
 void test_variable_args (int num, ...) {
 	va_list arguments;
 
@@ -37,6 +39,10 @@ int main (int argc, char ** argv) {
 	printf ("Size of long = %d\n", sizeof (long));
 	printf ("Size of double = %d\n", sizeof (double));
 	printf ("Size of float = %d\n", sizeof (float));
+
+	test_function ();
+
+	printf ("-->%d", TEST_VALUE);
 
 	return 0;
 }
