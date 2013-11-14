@@ -40,7 +40,7 @@
 
 
 /*
- * PROTOTYPE DEFINITIONS
+ * PUBLIC FUNCTION DECLARATIONS
  * ======================================================
  */
 extern void acute_assert (int result, int line, char * exception, ...);
