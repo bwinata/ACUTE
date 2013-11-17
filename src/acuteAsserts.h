@@ -43,13 +43,13 @@
  * PUBLIC FUNCTION DECLARATIONS
  * ======================================================
  */
-extern void acute_assert (int result, int line, char * exception, ...);
-extern void acute_assert_true (int result, int line, char * exception, ...);
-extern void acute_assert_false (int result, int line, char * exception, ...);
-extern void acute_assert_equal (int actual, int expected, int line, char * exception, ...);
-extern void acute_assert_not_equal (int actual, int expected, int line, char * exception, ...);
-extern void acute_assert_string_equal (int actual, int expected, int line, char * exception);
-extern void acute_assert_string_not_equal (int actual, int expected, int line, char * exception);
+//extern void acute_assert (int result, int line, char * exception, ...);
+//extern void acute_assert_true (int result, int line, char * exception, ...);
+//extern void acute_assert_false (int result, int line, char * exception, ...);
+//extern void acute_assert_equal (int actual, int expected, int line, char * exception, ...);
+//extern void acute_assert_not_equal (int actual, int expected, int line, char * exception, ...);
+//extern void acute_assert_string_equal (int actual, int expected, int line, char * exception);
+//extern void acute_assert_string_not_equal (int actual, int expected, int line, char * exception);
 
 
 #endif /* ACUTEASSERTS_H_ */

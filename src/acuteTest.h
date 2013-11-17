@@ -18,20 +18,37 @@
  * TYPE DEFINITIONS
  * ======================================================
  */
-
+#define GENERAL_TEST_QUEUE_NAME		"General Test Case Queue"
 
 /*
  * STRUCTURE DEFINITIONS
  * ======================================================
  */
 
+/*
+ * STRUCTURE: ACUTE_testMethod
+ * ------------------------------------------------------
+ * The test method to be executed during testing. Each method
+ * must be associated with a test case. Each method that is
+ * created is subsequently pushed to the end of the specified
+ * Test Case queue (FIFO).
+ */
 typedef struct __ACUTE_TEST_METHOD__ {
 	unsigned char * testMethodName;
+	struct __ACUTE_TEST_CASE__ * testCase;
 	void (*testMethod) (void);
 	struct __ACUTE_TEST_METHOD__ * nextMethod;
 	struct __ACUTE_TEST_METHOD__ * prevMethod;
 } ACUTE_testMethod;
 
+
+/*
+ * STRUCTURE: ACUTE_testCase
+ * -------------------------------------------------------
+ * Each Test Case created must contain at least one Test
+ * Method. Every Test Case is subsequently pushed to the end of
+ * the specified Test Suite queue (FIFO).
+ */
 typedef struct __ACUTE_TEST_CASE__ {
 	unsigned char * testCaseName;
 	ACUTE_testMethod * testCaseHead;
@@ -39,6 +56,10 @@ typedef struct __ACUTE_TEST_CASE__ {
 	ACUTE_testMethod * testTearDown;
 } ACUTE_testCase;
 
+/*
+ * STRUCTURE: ACUTE_testSuite
+ * ------------------------------------------------------
+ */
 typedef struct __ACUTE_TEST_SUITE__ {
 	unsigned char * testSuiteName;
 	ACUTE_testCase * testCase;
@@ -50,7 +71,9 @@ typedef struct __ACUTE_TEST_SUITE__ {
  * PUBLIC FUNCTION DECLARATIONS
  * ======================================================
  */
-extern void ACUTE_createTestCase (unsigned char * testCaseName);
-extern void ACUTE_insertTestMethod (unsigned char * testMethodName, ACUTE_testCase * testCase, void (*testMethod) (void));
+extern ACUTE_testCase * ACUTE_createTestCase (unsigned char * testCaseName);
+extern void ACUTE_createSetup (ACUTE_testCase * testCase, unsigned char * setupMethodName, void (*setupMethod) (void));
+extern void ACUTE_createTearDown (ACUTE_testCase * testCase, unsigned char * tearDownName, void (*tearDownMethod) (void));
+extern void ACUTE_createTestMethod (ACUTE_testCase * testCase, unsigned char * testMethodName, void (*testMethod) (void));
 
 #endif /* ACUTETEST_H_ */

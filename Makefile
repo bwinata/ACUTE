@@ -10,7 +10,7 @@
 # associated libraries. 
 ########################################################
 
-WORKING_DIR		= ${shell pwd}
+WORKING_DIR			= ${shell pwd}
 
 ACUTE_SOURCE_DIR 	= $(WORKING_DIR)/src
 ACUTE_RELEASE_DIR	= $(WORKING_DIR)/release
@@ -23,10 +23,10 @@ ACUTE_SOURCE_FINAL	= $(ACUTE_SOURCE_DIR)/ACUTE.c
 ACUTE_EXAMPLES_PKGS = $(ACUTE_RELEASE_DIR)/binary_search_tree $(ACUTE_RELEASE_DIR)/singly_linked_list
 ACUTE_EXAMPLES_OBJS = ${foreach pkg, $(ACUTE_EXAMPLES_PKGS), $(ACUTE_RELEASE_DIR)/$(pkg).o}
 
-CC 				= gcc
-CWARN 			= -g -w -Wall
-CFLAGS			= $(CWARN)
-CINC			= -I$(ACUTE_SOURCE_DIR)
+CC 					= gcc
+CWARN 				= -g -w -Wall
+CFLAGS				= $(CWARN)
+CINC				= -I$(ACUTE_SOURCE_DIR)
 
 all:	$(ACUTE_RELEASE_DIR) $(ACUTE_LIB_DIR)/acuteAssert.o $(ACUTE_EXAMPLES_PKGS)
 
