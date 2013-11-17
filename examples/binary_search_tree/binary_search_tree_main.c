@@ -40,8 +40,6 @@ int main (int argc, char ** argv) {
 	printf ("Size of double = %d\n", sizeof (double));
 	printf ("Size of float = %d\n", sizeof (float));
 
-	test_function ();
-
 	printf ("-->%d", TEST_VALUE);
 
 	return 0;
