@@ -15,57 +15,17 @@
 #include <stdlib.h>
 
 /*
- * TYPE DEFINITIONS
- * ======================================================
- */
-#define GENERAL_TEST_QUEUE_NAME		"General Test Case Queue"
-
-/*
- * STRUCTURE DEFINITIONS
+ * PUBLIC TYPE DEFINITIONS
  * ======================================================
  */
 
 /*
- * STRUCTURE: ACUTE_testMethod
- * ------------------------------------------------------
- * The test method to be executed during testing. Each method
- * must be associated with a test case. Each method that is
- * created is subsequently pushed to the end of the specified
- * Test Case queue (FIFO).
+ * PUBLIC STRUCTURE DEFINITIONS
+ * ======================================================
  */
-typedef struct __ACUTE_TEST_METHOD__ {
-	unsigned char * testMethodName;
-	struct __ACUTE_TEST_CASE__ * testCase;
-	void (*testMethod) (void);
-	struct __ACUTE_TEST_METHOD__ * nextMethod;
-	struct __ACUTE_TEST_METHOD__ * prevMethod;
-} ACUTE_testMethod;
-
-
-/*
- * STRUCTURE: ACUTE_testCase
- * -------------------------------------------------------
- * Each Test Case created must contain at least one Test
- * Method. Every Test Case is subsequently pushed to the end of
- * the specified Test Suite queue (FIFO).
- */
-typedef struct __ACUTE_TEST_CASE__ {
-	unsigned char * testCaseName;
-	ACUTE_testMethod * testCaseHead;
-	ACUTE_testMethod * testSetup;
-	ACUTE_testMethod * testTearDown;
-} ACUTE_testCase;
-
-/*
- * STRUCTURE: ACUTE_testSuite
- * ------------------------------------------------------
- */
-typedef struct __ACUTE_TEST_SUITE__ {
-	unsigned char * testSuiteName;
-	ACUTE_testCase * testCase;
-	struct __ACUTE_TEST_SUITE__ * next;
-	struct __ACUTE_TEST_SUITE__ * prev;
-} ACUTE_testSuite;
+typedef struct __ACUTE_TEST_METHOD__ ACUTE_testMethod;
+typedef struct __ACUTE_TEST_CASE__ ACUTE_testCase;
+typedef struct __ACUTE_TEST_SUITE__ ACUTE_testSuite;
 
 /*
  * PUBLIC FUNCTION DECLARATIONS

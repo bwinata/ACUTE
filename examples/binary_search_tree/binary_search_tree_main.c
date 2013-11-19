@@ -23,13 +23,13 @@ void test_variable_args (int num, ...) {
 	double sum = 0;
 
 	va_start (arguments, num);
-
 	//printf ("--->%s\n", va_arg (arguments, char *));
-
 	va_end (arguments);
 }
 
 int main (int argc, char ** argv) {
+
+	char * cPointer = NULL;
 
 	test_variable_args (5);
 
@@ -40,9 +40,15 @@ int main (int argc, char ** argv) {
 	printf ("Size of double = %d\n", sizeof (double));
 	printf ("Size of float = %d\n", sizeof (float));
 
-	printf ("-->%d", TEST_VALUE);
+
+	ACUTE_ASSERT ((2 > 0));
+	ACUTE_ASSERT ((2 < 0));
+
+	ACUTE_ASSERT_NULL (cPointer);
+	ACUTE_ASSERT_NOT_NULL (cPointer);
 
 	return 0;
 }
+
 
 
