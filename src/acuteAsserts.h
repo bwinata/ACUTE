@@ -35,8 +35,8 @@
  * ======================================================
  */
 
-#define		ACUTE_ASSERT_EQUAL(actual, expected)				ACUTE_assert_equal (actual, expected, __LINE__, "ACUTE Expected: Values are not equal", ...)
-#define		ACUTE_ASSERT_NOT_EQUAL(actual, expected)			ACUTE_assert_not_equal (actual, expected, __LINE__, "ACUTE Expected: Values are equal", ...)
+#define		ACUTE_ASSERT_EQUAL(actual, expected)				ACUTE_assert_equal (actual, expected, __LINE__, "ACUTE Expected: Values are not equal")
+#define		ACUTE_ASSERT_NOT_EQUAL(actual, expected)			ACUTE_assert_not_equal (actual, expected, __LINE__, "ACUTE Expected: Values are equal")
 #define		ACUTE_ASSERT_STRING_EQUAL(actual, expected)			ACUTE_assert_string_equal (actual, expected, __LINE__, "ACUTE Expected: Strings are not equal")
 #define		ACUTE_ASSERT_STRING_NOT_EQUAL(actual, expected)		ACUTE_assert_string_not_equal (actual, expected, __LINE__, "ACUTE Expected: Strings are equal")
 

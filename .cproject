@@ -25,7 +25,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.archiver.cygwin.base.297150655" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.cygwin.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.base.1059963978" name="Cygwin C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.cygwin.base.1102295378" name="Cygwin C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.cygwin.base">
-								<option id="gnu.c.compiler.option.include.paths.795642172" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+								<option id="gnu.c.compiler.option.include.paths.795642172" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;C:\cygwin64\lib\gcc\i686-pc-cygwin\4.7.3\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\cygwin64\lib\gcc\i686-pc-cygwin\4.7.3\include-fixed&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\cygwin64\usr\include&quot;"/>

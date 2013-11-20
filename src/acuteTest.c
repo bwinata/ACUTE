@@ -1,5 +1,5 @@
 #include "acuteTest.h"
-#include "acuteException.h"
+#include "acuteAsserts.h"
 
 /*
  * PREPROCESSOR DEFINITIONS
@@ -12,7 +12,7 @@
  * ======================================================
  * NB: Placed in .c to hide internal data structure to client.
  * References to structures are made in corresponding header
- * file
+ * file.
  */
 
 /*
@@ -103,11 +103,14 @@ static void ACUTE_insertTestCaseIntoQueue (ACUTE_testSuite * testSuite) {
  */
 static void ACUTE_insertTestMethodIntoQueue (ACUTE_testMethod * testMethod) {
 	ACUTE_testMethod * tempMethod = (testMethod->testCase)->testCaseHead;
+	ACUTE_testMethod * tempMethodPrev = NULL;
+
 	while (tempMethod != NULL) {
+		tempMethodPrev = tempMethod;
 		tempMethod = tempMethod->nextMethod;
 	}
-	tempMethod->nextMethod = testMethod;
-	testMethod->prevMethod = tempMethod;
+	tempMethodPrev->nextMethod = testMethod;
+	testMethod->prevMethod = tempMethodPrev;
 }
 
 /*
@@ -188,16 +191,12 @@ static void ACUTE_queueTestMethod (ACUTE_testMethod * testMethod) {
 ACUTE_testCase * ACUTE_createTestCase (unsigned char * testCaseName) {
 	ACUTE_testCase * newTestCase = (ACUTE_testCase *) malloc (sizeof (ACUTE_testCase));
 
-	if (newTestCase == NULL || testCaseName == NULL) {
-		ACUTE_Throw (ACUTE_MEMORY_EXCEPTION);
-	} else {
-		newTestCase->testCaseName = testCaseName;
-		newTestCase->testCaseHead = NULL;
-		newTestCase->testSetup = NULL;
-		newTestCase->testTearDown = NULL;
+	newTestCase->testCaseName = testCaseName;
+	newTestCase->testCaseHead = NULL;
+	newTestCase->testSetup = NULL;
+	newTestCase->testTearDown = NULL;
 
-		ACUTE_queueTestCase (newTestCase);
-	}
+	ACUTE_queueTestCase (newTestCase);
 
 	return newTestCase;
 }
@@ -250,16 +249,62 @@ void ACUTE_createTearDown (ACUTE_testCase * testCase, unsigned char * tearDownNa
 void ACUTE_createTestMethod (ACUTE_testCase * testCase, unsigned char * testMethodName,  void (*testMethod) (void)) {
 	ACUTE_testMethod * newTestMethod = (ACUTE_testMethod *) malloc (sizeof (ACUTE_testMethod));
 
-	if (newTestMethod == NULL || testCase == NULL || testMethodName == NULL) {
-		ACUTE_Throw (ACUTE_MEMORY_EXCEPTION);
-	} else {
-		newTestMethod->testCase = testCase;
-		newTestMethod->testMethodName = testMethodName;
-		newTestMethod->testMethod = testMethod;
-		newTestMethod->prevMethod = NULL;
-		newTestMethod->nextMethod = NULL;
+	newTestMethod->testCase = testCase;
+	newTestMethod->testMethodName = testMethodName;
+	newTestMethod->testMethod = testMethod;
+	newTestMethod->prevMethod = NULL;
+	newTestMethod->nextMethod = NULL;
 
-		ACUTE_queueTestMethod (newTestMethod);
-	}
+	ACUTE_queueTestMethod (newTestMethod);
+}
+
+
+/*
+ * UNIT TESTS
+ * ======================================================
+ */
+void ACUTE_unitTest__insertTestMethodIntoQueue (void) {
+	/* Create Test Methods and allocate memory */
+	ACUTE_testMethod * testMethod = (ACUTE_testMethod *) malloc (sizeof(ACUTE_testMethod));
+	ACUTE_testMethod * anotherTestMethod = (ACUTE_testMethod *) malloc (sizeof(ACUTE_testMethod));
+	/* Create Test Case and allocate memory */
+	ACUTE_testCase * testCase = (ACUTE_testCase *) malloc (sizeof(ACUTE_testCase));
+
+	/* Check if memory has been allocated properly to test entities */
+	ACUTE_ASSERT_NOT_NULL (testMethod);
+	ACUTE_ASSERT_NOT_NULL (anotherTestMethod);
+	ACUTE_ASSERT_NOT_NULL (testCase);
+
+	/* Check if prev / next pointers are NULL */
+	ACUTE_ASSERT_NULL (testMethod->nextMethod);
+	ACUTE_ASSERT_NULL (testMethod->prevMethod);
+	ACUTE_ASSERT_NULL (anotherTestMethod->nextMethod);
+	ACUTE_ASSERT_NULL (anotherTestMethod->prevMethod);
+
+	/* Link Test Method to Test Case Head */
+	testCase->testCaseHead = testMethod;
+	/* Link Test Case to Test Method */
+	testMethod->testCase = testCase;
+	anotherTestMethod->testCase = testCase;
+
+	/* Check if Test Case has been allocated to Test Method */
+	ACUTE_ASSERT_NOT_NULL (testMethod->testCase);
+	/* Check if Test Case head has been allocated to Test Method */
+	ACUTE_ASSERT_NOT_NULL (testMethod->testCase->testCaseHead);
+	ACUTE_ASSERT_NOT_NULL (anotherTestMethod->testCase->testCaseHead);
+
+	/* Check if Test Cases are the same for both Test Methods */
+	ACUTE_ASSERT_EQUAL (testMethod->testCase, anotherTestMethod->testCase);
+
+	/* Insert Method into queue */
+	ACUTE_insertTestMethodIntoQueue (anotherTestMethod);
+
+	/* Check that the new method has been appended to queue */
+	ACUTE_ASSERT_NOT_NULL(anotherTestMethod->prevMethod);
+	ACUTE_ASSERT_NULL(anotherTestMethod->nextMethod);
+}
+
+void ACUTE_unitTest__insertTestCaseIntoQueue (void) {
+
 }
 
