@@ -14,10 +14,6 @@
 
 #include <stdlib.h>
 
-/*
- * PUBLIC TYPE DEFINITIONS
- * ======================================================
- */
 
 /*
  * PUBLIC STRUCTURE DEFINITIONS
@@ -26,6 +22,12 @@
 typedef struct __ACUTE_TEST_METHOD__ ACUTE_testMethod;
 typedef struct __ACUTE_TEST_CASE__ ACUTE_testCase;
 typedef struct __ACUTE_TEST_SUITE__ ACUTE_testSuite;
+
+/*
+ * GLOBAL DEFINITIONS
+ * ======================================================
+ */
+extern ACUTE_testSuite * globalHeadQueue;
 
 /*
  * PUBLIC FUNCTION DECLARATIONS

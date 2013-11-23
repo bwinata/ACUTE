@@ -60,7 +60,7 @@ typedef struct __ACUTE_TEST_SUITE__ {
  * GLOBAL VARIABLES
  * ======================================================
  */
-static ACUTE_testSuite * globalHeadQueue = NULL;
+ACUTE_testSuite * globalHeadQueue = NULL;
 
 /*
  * PRIVATE FUNCTIONS DEFINITIONS
