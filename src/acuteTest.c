@@ -82,11 +82,13 @@ static ACUTE_testSuite * globalHeadQueue = NULL;
  */
 static void ACUTE_insertTestCaseIntoQueue (ACUTE_testSuite * testSuite) {
 	ACUTE_testSuite * tempSuite = globalHeadQueue;
+	ACUTE_testSuite * tempSuitePrev = NULL;
 	while (tempSuite != NULL) {
+		tempSuitePrev = tempSuite;
 		tempSuite = tempSuite->next;
 	}
-	tempSuite->next = testSuite;
-	testSuite->prev = tempSuite;
+	tempSuitePrev->next = testSuite;
+	testSuite->prev = tempSuitePrev;
 }
 
 /*
@@ -249,6 +251,10 @@ void ACUTE_createTearDown (ACUTE_testCase * testCase, unsigned char * tearDownNa
 void ACUTE_createTestMethod (ACUTE_testCase * testCase, unsigned char * testMethodName,  void (*testMethod) (void)) {
 	ACUTE_testMethod * newTestMethod = (ACUTE_testMethod *) malloc (sizeof (ACUTE_testMethod));
 
+	if (testCase == NULL) {
+		printf ("Cannot create Test Method. Test Case is invalid!...Exiting\n");
+		exit (1);
+	}
 	newTestMethod->testCase = testCase;
 	newTestMethod->testMethodName = testMethodName;
 	newTestMethod->testMethod = testMethod;
@@ -262,6 +268,18 @@ void ACUTE_createTestMethod (ACUTE_testCase * testCase, unsigned char * testMeth
 /*
  * UNIT TESTS
  * ======================================================
+ */
+
+/*
+ * FUNCTION: ACUTE_unitTest__insertTestMethodIntoQueue
+ * ------------------------------------------------------
+ * Inserts a Test Method into an existing queue and verifies
+ * that the Test Method / Test Case is valid as well as the queue.
+ *
+ * IN:
+ * 	- N/A
+ * OUT:
+ * 	- N/A
  */
 void ACUTE_unitTest__insertTestMethodIntoQueue (void) {
 	/* Create Test Methods and allocate memory */
@@ -304,7 +322,119 @@ void ACUTE_unitTest__insertTestMethodIntoQueue (void) {
 	ACUTE_ASSERT_NULL(anotherTestMethod->nextMethod);
 }
 
+/*
+ * FUNCTION: ACUTE_unitTest__insertTestMethodIntoQueue
+ * ------------------------------------------------------
+ * Inserts a two Test Cases into a queue in order to verify
+ * that the test cases are valid and ensuring the global head queue
+ * is properly created.
+ *
+ * IN:
+ * 	- N/A
+ * OUT:
+ * 	- N/A
+ */
 void ACUTE_unitTest__insertTestCaseIntoQueue (void) {
+	/* Create and allocate memory for two Test Suites to be queued */
+	ACUTE_testSuite * testSuite = (ACUTE_testSuite *) malloc (sizeof (ACUTE_testSuite));
+	ACUTE_testSuite * anotherTestSuite = (ACUTE_testSuite *) malloc (sizeof (ACUTE_testSuite));
+
+	/* Check each Test Suite is not NULL */
+	ACUTE_ASSERT_NOT_NULL (testSuite);
+	ACUTE_ASSERT_NOT_NULL (anotherTestSuite);
+
+	/* Check that global head queue is NULL */
+	globalHeadQueue = NULL;
+	ACUTE_ASSERT_NULL (globalHeadQueue);
+
+	/* Assign first Test Suite as Head of queue */
+	globalHeadQueue = testSuite;
+	/* Check that Global Head queue is not NULL */
+	ACUTE_ASSERT_NOT_NULL (globalHeadQueue);
+
+	/* Queue Test Case */
+	ACUTE_insertTestCaseIntoQueue (anotherTestSuite);
+
+	/* Check that new Test Suite is correctly positioned in queue */
+	ACUTE_ASSERT_NOT_NULL (anotherTestSuite->prev);
+	ACUTE_ASSERT_NULL (anotherTestSuite->next);
+}
+
+/*
+ * FUNCTION: ACUTE_testMethodDummy
+ * ------------------------------------------------------
+ * Test Method to be allocated to Test Case.
+ *
+ * IN:
+ * 	- N/A
+ * OUT:
+ * 	- N/A
+ */
+void ACUTE_testMethodDummy (void) {
+	printf ("This is a test method\n");
+}
+
+/*
+ * FUNCTION: ACUTE_unitTest__createTestCase
+ * ------------------------------------------------------
+ * Creates a Test Case. Test ensures that the Global Head
+ * is NULL, the proceeds to insert Cases. Finally checks that
+ * Cases are properly positioned in the queue.
+ *
+ * IN:
+ * 	- N/A
+ * OUT:
+ * 	- N/A
+ */
+void ACUTE_unitTest__createTestCase (void) {
+	/* Set Global Head to NULL */
+	globalHeadQueue = NULL;
+	/* Check that Global Head is NULL */
+	ACUTE_ASSERT_NULL (globalHeadQueue);
+
+	/* Create Test Case */
+	ACUTE_createTestCase ("Test Case 1");
+	ACUTE_createTestCase ("Test Case 2");
+
+	/* Check that Global Head is not NULL because a new Test Suite / Test Case has been created */
+	ACUTE_ASSERT_NOT_NULL (globalHeadQueue);
+	/* Check that the Global Head is pointing to the next Test Suite with the next Test Case */
+	ACUTE_ASSERT_NOT_NULL (globalHeadQueue->next);
+
+	/* Verify "Test Case 1 / 2" is correctly positioned in queue */
+	printf ("%s\n", globalHeadQueue->testCase->testCaseName);
+	printf ("%s\n", globalHeadQueue->next->testCase->testCaseName);
 
 }
+
+/*
+ * FUNCTION: ACUTE_unitTest__createTestMethod
+ * ------------------------------------------------------
+ * Creates a Test Method and appends it to the queue. Checks
+ * that Test can be executed correctly from the queue.
+ *
+ * IN:
+ * 	- N/A
+ * OUT:
+ * 	- N/A
+ */
+void ACUTE_unitTest__createTestMethod (void) {
+	/* Create and allocate memory for a Test Case */
+	ACUTE_testCase * testCase = (ACUTE_testCase *) malloc (sizeof (ACUTE_testCase));
+
+	/* Check Test Case is not NULL */
+	ACUTE_ASSERT_NOT_NULL (testCase);
+	/* Check that Test Case head is NULL */
+	ACUTE_ASSERT_NULL (testCase->testCaseHead);
+
+	/* Create Test Method */
+	ACUTE_createTestMethod (testCase, "Test Method 1", ACUTE_testMethodDummy);
+
+	/* Check Test Method has been appropriately queued */
+	ACUTE_ASSERT_NOT_NULL (testCase->testCaseHead);
+
+	/* Run Test Method Dummy */
+	testCase->testCaseHead->testMethod ();
+}
+
 
