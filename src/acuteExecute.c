@@ -5,6 +5,30 @@
  * ======================================================
  */
 
+static unsigned int ACUTE_getNumTestCases (ACUTE_testSuite * headSuite) {
+	static int counter = 0;
+	if (headSuite == NULL)
+		return counter;
+	else {
+		counter++;
+		return ACUTE_getNumTestCases (headSuite->next);
+	}
+}
+
+
+static unsigned int ACUTE_getNumTestMethods (ACUTE_testSuite * headSuite) {
+	static int counter = 0;
+
+	while (headSuite != NULL) {
+		while (headSuite->testCase->testCaseHead != NULL) {
+			counter++;
+			headSuite->testCase->testCaseHead = headSuite->testCase->testCaseHead->nextMethod;
+		}
+		headSuite = headSuite->next;
+	}
+	return counter;
+}
+
 /*
  * FUNCTION: ACUTE_runTestMethods
  * ------------------------------------------------------
@@ -64,7 +88,8 @@ static void ACUTE_runTestCases (ACUTE_testSuite * testSuite, ACUTE_testCase * te
  * FUNCTION: ACUTE_run
  * ------------------------------------------------------
  * Runs all registered Test Cases. Progressively traverses through
- * the linked list of each
+ * the linked list of each Test Case and executes asscoiated Test
+ * Methods.
  *
  * IN:
  * 	- Newly created Test Method.
@@ -78,11 +103,48 @@ void ACUTE_run (void) {
 	ACUTE_testCase * entryTestCase = NULL;
 	ACUTE_testMethod * entryTestMethod = NULL;
 
-	printf ("==================================================\n");
+	unsigned int noTestCases, noTestMethods, noAssertions;
+
+	printf ("\n==================================================\n");
 	printf ("ACUTE: Unit Testing Framework\n");
 	printf ("==================================================\n");
-	ACUTE_runTestCases (entryTestSuite, entryTestCase, entryTestMethod);
+	printf ("No. Test Cases    :    %d\n", (noTestCases = ACUTE_getNumTestCases (entryTestSuite)));
+	printf ("No. Test Methods  :    0\n", (noTestMethods = 0));
+	printf ("No. Assertions    :    0\n", (noAssertions = 0));
 	printf ("==================================================\n");
-	printf ("Finished!\n");
+
+	if (!noTestCases)
+		printf ("\n**No Test Cases to process. Please register a valid Test Case and try again.**\n\n");
+	else if (!noTestMethods)
+		printf ("\n**No Test Methods to process. Please register a valid Test Method and try again.**\n\n");
+	else
+		ACUTE_runTestCases (entryTestSuite, entryTestCase, entryTestMethod);
+
 	printf ("==================================================\n");
+	printf ("ACUTE: Finished!\n");
+	printf ("==================================================\n");
+
+	/* Exit Safely - prevents subsequent funtions running after. This function must execute at the end */
+	exit (0);
+}
+
+/*
+ * UNIT TESTS
+ * ======================================================
+ */
+
+void myDummyTestMethod (void) {
+	printf ("Hello World, this is a test function\n");
+}
+
+void ACUTE_unitTest__run (void) {
+	/* Initialise Global Head to NULL */
+	globalHeadQueue = NULL;
+
+	ACUTE_testSuite * myTestSuite1 = ACUTE_createTestCase ("Test Case 1");
+	ACUTE_testSuite * myTestSuite2 = ACUTE_createTestCase ("Test Case 2");
+
+	//ACUTE_createTestMethod (myTestSuite1, "Test Method 1", myDummyTestMethod);
+
+	ACUTE_run ();
 }

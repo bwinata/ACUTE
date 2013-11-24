@@ -19,5 +19,7 @@ int main (int argc, char ** argv) {
 	printf ("Unit Test: ACUTE_unitTest__insertTestQueueIntoQueue\n");
 	ACUTE_unitTest__insertTestCaseIntoQueue ();
 	printf ("--------------------------------------\n");
+	printf ("Unit Test: ACUTE_unitTest__run\n");
+	ACUTE_unitTest__run ();
 	return 0;
 }
