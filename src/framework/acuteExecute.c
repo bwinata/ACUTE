@@ -1,10 +1,37 @@
-#include "acuteTest.h"
+/**************************************************************
+ * ACUTE - Another C Unit Testing Environment
+ * ------------------------------------------------------------
+ * Decription:
+ * 	Execution framework responsible for verifying validity of
+ * 	Test Cases / Methods and proceeds to run Unit Tests. Generates
+ * 	output summary on the command line.
+ *
+ * Module	:	ACUTE Framework
+ * File		:	acuteExecute.c
+ *
+ * Author	: 	Barry Winata
+ * Date		:	14 November 2013
+ * Contact	:	barry.winata@yahoo.com
+ *
+ **************************************************************/
+
+#include "acuteFramework.h"
 
 /*
  * PRIVATE FUNCTIONS DEFINITIONS
  * ======================================================
  */
 
+/*
+ * FUNCTION: ACUTE_getNumTestCases
+ * ------------------------------------------------------
+ * Gets number of registered Test Cases.
+ *
+ * IN:
+ * 	- Head node to General Test Suite.
+ * OUT:
+ * 	- Number of available Test Cases.
+ */
 static unsigned int ACUTE_getNumTestCases (ACUTE_testSuite * headSuite) {
 	static int counter = 0;
 	if (headSuite == NULL)
@@ -15,7 +42,17 @@ static unsigned int ACUTE_getNumTestCases (ACUTE_testSuite * headSuite) {
 	}
 }
 
-
+/*
+ * FUNCTION: ACUTE_getNumTestMethods
+ * ------------------------------------------------------
+ * Gets total number of registered Test Methods in all
+ * available Test Cases.
+ *
+ * IN:
+ * 	- Head node to General Test Suite.
+ * OUT:
+ * 	- Total number of available Test Methods
+ */
 static unsigned int ACUTE_getNumTestMethods (ACUTE_testSuite * headSuite) {
 	static int counter = 0;
 
@@ -32,8 +69,9 @@ static unsigned int ACUTE_getNumTestMethods (ACUTE_testSuite * headSuite) {
 /*
  * FUNCTION: ACUTE_runTestMethods
  * ------------------------------------------------------
- * Runs all registered Test Cases. Progressively traverses through
- * the linked list of each
+ * Runs all registered Test Methods. Progressively traverses through
+ * the linked list of each Test Suite node and executes each
+ * method.
  *
  * IN:
  * 	- Newly created Test Method.
@@ -57,10 +95,12 @@ static void ACUTE_runTestMethods (ACUTE_testMethod * testMethod) {
  * FUNCTION: ACUTE_runTestCases
  * ------------------------------------------------------
  * Runs all registered Test Cases. Progressively traverses through
- * the linked list of each
+ * the general linked list of each suite.
  *
  * IN:
- * 	- Newly created Test Method.
+ * 	- Pointer to Test Suite
+ * 	- Pointer to Test Case derived from Test Suite
+ * 	- Pointer to Test Method derived from Test Case
  * OUT:
  * 	- N/A
  */
@@ -109,7 +149,7 @@ void ACUTE_run (void) {
 	printf ("ACUTE: Unit Testing Framework\n");
 	printf ("==================================================\n");
 	printf ("No. Test Cases    :    %d\n", (noTestCases = ACUTE_getNumTestCases (entryTestSuite)));
-	printf ("No. Test Methods  :    0\n", (noTestMethods = 0));
+	printf ("No. Test Methods  :    %d\n", (noTestMethods = ACUTE_getNumTestMethods (entryTestSuite)));
 	printf ("No. Assertions    :    0\n", (noAssertions = 0));
 	printf ("==================================================\n");
 
@@ -133,10 +173,31 @@ void ACUTE_run (void) {
  * ======================================================
  */
 
+/*
+ * FUNCTION: myDummyTestMethod
+ * ------------------------------------------------------
+ * Dummy Test Method
+ *
+ * IN:
+ * 	- N/A
+ * OUT:
+ * 	- N/A
+ */
 void myDummyTestMethod (void) {
 	printf ("Hello World, this is a test function\n");
 }
 
+/*
+ * FUNCTION: ACUTE_unitTest__run
+ * ------------------------------------------------------
+ * Tests if Test Cases / Methods are valid and executes
+ * respective methods.
+ *
+ * IN:
+ * 	- N/A
+ * OUT:
+ * 	- N/A
+ */
 void ACUTE_unitTest__run (void) {
 	/* Initialise Global Head to NULL */
 	globalHeadQueue = NULL;
@@ -144,7 +205,7 @@ void ACUTE_unitTest__run (void) {
 	ACUTE_testSuite * myTestSuite1 = ACUTE_createTestCase ("Test Case 1");
 	ACUTE_testSuite * myTestSuite2 = ACUTE_createTestCase ("Test Case 2");
 
-	//ACUTE_createTestMethod (myTestSuite1, "Test Method 1", myDummyTestMethod);
+	ACUTE_createTestMethod (myTestSuite1, "Test Method 1", myDummyTestMethod);
 
 	ACUTE_run ();
 }

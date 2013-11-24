@@ -1,4 +1,4 @@
-#include "acuteTest.h"
+#include "acuteFramework.h"
 #include "acuteAsserts.h"
 
 /*
@@ -8,9 +8,60 @@
 #define GENERAL_TEST_QUEUE_NAME		"General Test Case Queue"
 
 /*
+ * PUBLIC STRUCTURE DEFINITIONS
+ * ======================================================
+ */
+
+/*
+ * STRUCTURE: ACUTE_testMethod
+ * ------------------------------------------------------
+ * The test method to be executed during testing. Each method
+ * must be associated with a test case. Each method that is
+ * created is subsequently pushed to the end of the specified
+ * Test Case queue (FIFO).
+ */
+typedef struct __ACUTE_TEST_METHOD__ {
+	unsigned char * testMethodName;
+	struct __ACUTE_TEST_CASE__ * testCase;
+	void (*testMethod) (void);
+	struct __ACUTE_TEST_METHOD__ * nextMethod;
+	struct __ACUTE_TEST_METHOD__ * prevMethod;
+} ACUTE_testMethod;
+
+/*
+ * STRUCTURE: ACUTE_testCase
+ * -------------------------------------------------------
+ * Each Test Case created must contain at least one Test
+ * Method. Every Test Case is subsequently pushed to the end of
+ * the specified Test Suite queue (FIFO).
+ */
+typedef struct __ACUTE_TEST_CASE__ {
+	unsigned char * testCaseName;
+	ACUTE_testMethod * testCaseHead;
+	ACUTE_testMethod * testSetup;
+	ACUTE_testMethod * testTearDown;
+} ACUTE_testCase;
+
+/*
+ * STRUCTURE: ACUTE_testSuite
+ * ------------------------------------------------------
+ * Each Test Suite must contain a Test Case. Multiple Test
+ * Suites can be created.
+ */
+typedef struct __ACUTE_TEST_SUITE__ {
+	unsigned char * testSuiteName;
+	ACUTE_testCase * testCase;
+	struct __ACUTE_TEST_SUITE__ * next;
+	struct __ACUTE_TEST_SUITE__ * prev;
+} ACUTE_testSuite;
+
+
+/*
  * GLOBAL VARIABLES
  * ======================================================
  */
+
+/* Global Head Node representing the start of the general Test Case queue */
 ACUTE_testSuite * globalHeadQueue = NULL;
 
 /*
@@ -134,12 +185,14 @@ static void ACUTE_queueTestMethod (ACUTE_testMethod * testMethod) {
 /*
  * FUNCTION: ACUTE_createTestCase
  * ------------------------------------------------------
- * Queues Test Method at the end of the Test Case linked list
+ * Creates a brand spanking new Test Case by the client.
+ * Each Test Case must be associated with a unique name.
+ * Proceeds to queue Test Case.
  *
  * IN:
- * 	- Newly created Test Method.
+ * 	- Newly created Test Case Name.
  * OUT:
- * 	- N/A
+ * 	- Pointer to newly created Test Case.
  */
 ACUTE_testCase * ACUTE_createTestCase (unsigned char * testCaseName) {
 	ACUTE_testCase * newTestCase = (ACUTE_testCase *) malloc (sizeof (ACUTE_testCase));
@@ -158,7 +211,9 @@ ACUTE_testCase * ACUTE_createTestCase (unsigned char * testCaseName) {
 /*
  * FUNCTION: ACUTE_createSetup
  * ------------------------------------------------------
- * Queues Test Method at the end of the Test Case linked list
+ * Setup code that is to be executed before every Test Method.
+ * This setup is defined within a specified Test Case. There
+ * can only be one instance of this Setup per Test Case.
  *
  * IN:
  * 	- Newly created Test Method.
@@ -177,7 +232,9 @@ void ACUTE_createSetup (ACUTE_testCase * testCase, unsigned char * setupMethodNa
 /*
  * FUNCTION: ACUTE_createTearDown
  * ------------------------------------------------------
- * Queues Test Method at the end of the Test Case linked list
+ * This code is to be executed after every Test Method. This
+ * Tear Down is definied within a specified Test Case. There
+ * can only be one instance of this Tear Down per Test Case.
  *
  * IN:
  * 	- Newly created Test Method.
@@ -192,10 +249,14 @@ void ACUTE_createTearDown (ACUTE_testCase * testCase, unsigned char * tearDownNa
 /*
  * FUNCTION: ACUTE_createTestMethod
  * ------------------------------------------------------
- * Queues Test Method at the end of the Test Case linked list
+ * Creates a new Test Method associated with a specific
+ * Test Case. Each Test Method is unique with its own
+ * name within each Test Case.
  *
  * IN:
- * 	- Newly created Test Method.
+ * 	- Pointer to created Test Case.
+ * 	- Pointer to Test Method string
+ * 	- Pointer to Test Method.
  * OUT:
  * 	- N/A
  */

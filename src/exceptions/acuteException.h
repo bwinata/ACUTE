@@ -1,11 +1,16 @@
 /**************************************************************
- * ACUTE
- *
+ * ACUTE - Another C Unit Testing Environment
+ * ------------------------------------------------------------
  * Decription:
- * Exception Definitions
+ * 	Responsible for exception handling. Exceptions are thrown
+ * 	and respectively caught by the "Try / Catch" statement.
  *
- * Author	:	Barry Winata
+ * Module	:	ACUTE Exceptions
+ * File		:	acuteException.h
+ *
+ * Author	: 	Barry Winata
  * Date		:	17 November 2013
+ * Contact	:	barry.winata@yahoo.com
  *
  **************************************************************/
 
